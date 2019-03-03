@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>FiestaPivot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="static/CSS/main.css">
+
+    <!-- W3 schools modal stylsheet  -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <!--Bootstrap CDN and JS-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body style="background: url(static/Images/cateringDark.jpg) center;">
+    
+    <!--Navbar (Bootstrap taken from https://www.codeply.com/go/qhaBrcWp3v) -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+        <a class="navbar-brand abs" href="/">FiestaPivot</a>
+        <button class="navbar-toggler" type="button" data-to0987ggle="collapse" data-target="#collapsingNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="collapsingNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/search">Search</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" value="{{email}}" id="userL" href="/account">{{name[0]}}</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/post-ad">
+                        <button type="button" class="btn btn-outline-light">Post an Ad</button>
+                    </a>
+                </li>
+                <li style="margin-left: 10px;" class="nav-item">
+                    <a href="/logout">
+                        <button type="button" class="btn btn-outline-light">Sign Out</button>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="container" >
+        <!-- Body -->
+        <div id="body">
+            <div class="sidebar col-lg-3" style="background-color: #eee; padding-top: 30px;">
+                <h3 class="rw">Search for ads</h3><br>
+                <h5 class="rw">Please enter in criteria:</h5><p></p>
+
+                <!--Input fields for search criteria-->
+                <div class="rw">
+                    <p for="inputPassword4" class="text-dark">Keywords</p>
+                    <input id = "keywords" value="{{keywords}}" type="text" name="title" class="form-control" id="inputPassword4" placeholder="Type in keywords">
+                </div><br>
+                <div class="rw">
+                    <p for="inputCity" class="text-dark">City</p>
+                    <input id="city" type="text" name="city" class="form-control" placeholder="E.g. Sydney">
+                </div><br>
+                <div class="rw">
+                    <p for="inputState" class="text-dark">State</p>
+                    <select name="state" id="state" class="form-control">
+                        <option selected>Choose...</option>
+                        <option>NSW</option>
+                        <option>QLD</option>
+                        <option>SA</option>
+                        <option>TAS</option>
+                        <option>VIC</option>
+                        <option>WA</option>
+                    </select>
+                </div> <br>
+                <div class="rw" style="height: auto">
+                        <p for="inputCity" class="text-dark">Min. Price</p>
+                        <span class="price">
+                            <input id="minPrice" name="price" class="form-control" type="number" min="0.00" max="10000.00"/>
+                        </span>
+                </div> <br>
+                <div class="rw" style="height: auto">
+                        <p for="inputCity" class="text-dark">Max. Price</p>
+                        <span class="price">
+                            <input id="maxPrice" name="price" class="form-control" type="number" min="0.00" max="10000.00"/>
+                        </span>
+                </div> <br>
+                <div class="rw">
+                        <p for="inputCity" class="text-dark">From date:</p>
+                        <input id="date" class="form-control" type="date" name="date" min="now">
+                </div> <br>
+
+                <!--Ordering results by certain criteria-->
+                <div class="rw">
+                    <p>Sort by:</p>
+                    <select id="sortSelect" name="sortSelect">
+                        <option value="0">Date: Soonest first</option>
+                        <option value="1">Date: Furthest first</option>
+                        <option value="2">Price: Lowest first</option>
+                        <option value="3">Price: Highest first</option>
+                    </select>
+                </div> <br>
+
+                <div class="rw">
+                    <p>Size:</p>
+                        <select id="noPeople" name="noPeople" class="form-control">
+                            <option value="0" selected>None</option>
+                            <option value="1">1-10</option>
+                            <option value="2">11-20</option>
+                            <option value="3">21-50</option>
+                            <option value="4">51 - 100</option>
+                            <option value="5">101-200</option>
+                            <option value="6">200+</option>
+                        </select>
+                </div> <br>
+
+                <div class="rw">
+                    <p>Alcohol provisions:</p>
+                        <select id="alcohol" name="alcohol" class="form-control">
+                            <option value="Both" selected>Both</option>
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                </div> <br>
+
+                <button onclick="filter()" class="btn btn-lg btn-primary">Refresh</button>
+            </div>
+             
+
+             <!--Put boxes containing ads in here-->
+             <div class="results">
+
+                <div class="list-group" style="width: 100%;">
+                    {% if adSorted %}
+                    {% for ads in adSorted %}
+                    <div class="sortedBox">
+                    {% if ads %}
+                    {% for ad in ads %}
+                    {% if ad[7] == "ACTIVE" %}
+                    <a onclick="document.getElementById('{{loop.index0}}-{{ad[0]}}').style.display='block'" href="#" class="list-group-item list-group-item-action flex-column align-items-start" style="width: 100%;">
+                        <h5 id="title" value="{{ad[2]}}" class="mb-1">{{ ad[2] }}</h5>
+                        <small id="date" value="{{ad[8]}}">Date: {{ ad[8] }}</small>
+                        <p id="description" value="{{ad[6]}}" class="mb-1">{{ ad[6] }}</p>
+                        <small class="info" id="adUser" value="{{ad[1]}}">Posted by: {{ ad[1] }}</small>
+                        <small id="price" value="{{ad[3]}}" class="info">Price: {{ ad[3] }}</small>
+                        <small id="city" value="{{ad[4]}}" class="inf0">City: {{ ad[4] }}</small>
+                        <small id="state" value="{{ad[5]}}" class="info">State: {{ ad[5] }}</small>
+                        <small id="alcohol" value="{{ad[11]}}" class="info">Alcohol provisions: {{ ad[11] }}</small>
+                        <small id="noPeople" value="{{ad[12]}}" class="info">Number of people: {{ ad[12] }}</small>
+                    </a>
+
+                    <!--AD MODALS-->
+                    <div class="Modals">
+                        <div id="{{loop.index0}}-{{ad[0]}}" class="w3-modal">
+                            <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+            
+                            <div class="modal-header">
+                                <span onclick="document.getElementById('{{loop.index0}}-{{ad[0]}}').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+                                <h5 id="adTitle" class="modal-title">{{ad[2]}}</h5>
+                            </div>
+            
+                            <div class="w3-container">
+                                <div class="w3-section">
+                                    <h5>Posted by:</h5>
+                                        <label>{{ad[1]}}</label>
+                                    <h5>Date:</h5>
+                                        <label>{{ad[8]}}</label>
+                                    <h5>Location:</h5>
+                                        <label>{{ad[4]}}, {{ad[5]}}</label>
+                                    <h5>Price:</h5>
+                                        <label>{{ad[3]}}</label>
+                                    <h5>Alcohol provisions:</h5>
+                                        <label>{{ad[11]}}</label>
+                                    <h5>Number of people:</h5>
+                                        <label>{{ad[12]}}</label>
+                                    <h5>Job description:</h5>
+                                        <label>{{ad[6]}}</label>
+                                </div>
+                            </div>
+            
+                            <div class="modal-footer">
+                                <button onclick="bidModal('{{ad[2]}}', '{{loop.index0}}-{{ad[0]}}', '{{ad[0]}}','{{ad[3]}}')" type="button" class="btn btn-lg btn-primary w3-hover-red">Place bid</button>
+                            </div>
+            
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+
+                </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <!--Modal for bid-->
+                <div class="Modals">
+                    <div id="bid" class="w3-modal">
+                        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+                            
+                            <div class="modal-header">
+                                <span onclick="document.getElementById('bid').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+                                <label id="bidTitle"></label>
+                            </div>
+                            
+                            <form action="/bid-send" method="post" class="w3-container">
+                                <div class="w3-container">
+                                    <div class="w3-section">
+                                        <h4>Original price: </h4>
+                                        <p id="oPrice" name="oPrice" value=""></p>
+                                        <h4>Your price:</h4>
+                                            <input id="priceInput" name="priceInput" value="" type="number" min="0.00" max="1000000.00" required>
+                                        <p id="priceWarning" style="color: orange;"></p>
+                                        <h4>Additional messages/comments to poster:</h4>
+                                            <input id="commentInput" name="commentInput" placeholder="Notes to poster" required>
+                                        <input id="adID" name="adID" type="hidden">
+                                    </div>
+                                </div>
+                                 <div class="modal-footer">
+                                    <button type="submit" value="Place Bid" type="button" class="btn btn-lg btn-primary w3-hover-red">Place bid</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer-->
+        <div id="footer">
+            <footer class="page-footer font-small navbar-dark bg-dark pt-4">
+                <div class="container text-center">
+                    <p class="text-light">
+                    FiestaPivot is an innovative new take on the outsourcing business model - bringing all its benefits to the realm of food preparation. Find people to cater for your party, black tie function, or picnic, or offer your services to help new clients, and become the most in-demand business in town.
+                    </p>
+                </div>
+                <div class="text-center py-3"><p class="text-light">© 2018 Copyright Team Artemis</div>
+            </footer>
+        </div>
+    </div>
+
+<!-- SCRIPTS -->
+
+    <!--To be run when the page loads-->
+    <script>
+    let sort = 0; // Will be sorting by closest event by default
+    let sortBoxes = document.getElementsByClassName("sortedBox");
+    for (let i=0; i<sortBoxes.length; i++)
+    {
+        if (i == sort) { sortBoxes[i].style.display="block"; }
+        else {sortBoxes[i].style.display="none";}
+    }
+    </script>
+
+    <!--Successful bid confirmation-->
+    <script>
+    function bidSuccess(title) 
+    {
+        alert("Successfully bidded on " + title + "!");
+    }
+    </script>
+
+    <!--Bring up bid modal-->
+    <script>
+    function bidModal(postTitle, elemID,postID, oPrice)
+    {
+        // Hide old modal
+        document.getElementById(elemID).style.display='none';
+        
+        // Change title of new modal to contain title of ad
+        document.getElementById('bidTitle').innerHTML = "Bidding on: " + postTitle;
+
+        // Display original ad price + set new price to old
+        document.getElementById('oPrice').innerHTML = oPrice;
+        document.getElementById('oPrice').value = oPrice;
+        document.getElementById('priceInput').value = oPrice;
+        
+        // Show new modal
+        document.getElementById('bid').style.display='block';
+        
+        // Change label to be id of ad
+        document.getElementById('adID').value = postID;
+    }
+    </script>
+
+    <!--Handle search criteria-->
+    <script>
+        function filter()
+        {
+            // Get criteria entered
+            let keywords = document.getElementById("keywords").value;
+            let city = document.getElementById("city").value;
+            let state = document.getElementById("state").value;
+            let minPrice = parseFloat(document.getElementById("minPrice").value);
+            let maxPrice = parseFloat(document.getElementById("maxPrice").value);
+            let date = document.getElementById("date").value;
+            let alcohol = document.getElementById("alcohol").value;
+            let noPeople = document.getElementById("noPeople").value;
+            let user = document.getElementById("userL").attributes.value.value;
+            let sort = parseInt(document.getElementById("sortSelect").value);
+
+            // Show only the sorted results
+            let sortBoxes = document.getElementsByClassName("sortedBox");
+            for (let i=0; i<sortBoxes.length; i++)
+            {
+                if (i == sort) { sortBoxes[i].style.display="block"; }
+                else {sortBoxes[i].style.display="none";}
+            }
+
+            // Get all ad objects
+            let adResults = document.getElementsByClassName("flex-column");
+
+            // Loop through all ads and check for attributes
+            for (let i=0; i<adResults.length; i++)
+            {
+                // Set all to visible by default
+                adResults[i].style.display="block";
+
+                // Filtering by alcohol
+                let adAlc = adResults[i].children.alcohol.attributes.value.value;
+                if (adAlc != alcohol && alcohol != "Both")
+                {
+                    adResults[i].style.display="none";
+                }
+
+                // Filtering by number of people
+                let adNo = parseInt(adResults[i].children.noPeople.attributes.value.value);
+                if (noPeople == 1)
+                {
+                    if (adNo > 10) { adResults[i].style.display="none"; }
+                }
+                else if (noPeople == 2)
+                {
+                    if (adNo < 11 || adNo > 20) { adResults[i].style.display="none"; }
+                }
+                if (noPeople == 3)
+                {
+                    if (adNo < 21 || adNo > 50) { adResults[i].style.display="none"; }
+                }
+                if (noPeople == 4)
+                {
+                    if (adNo < 51 || adNo > 100) { adResults[i].style.display="none"; }
+                }
+                if (noPeople == 5)
+                {
+                    if (adNo < 101 || adNo > 200 ) { adResults[i].style.display="none"; }
+                }
+                if (noPeople == 6)
+                {
+                    if (adNo < 200) { adResults[i].style.display="none"; }
+                }
+
+                // Filtering by price
+                let adPrice = parseFloat(adResults[i].children.price.attributes.value.value);
+                if ((!isNaN(minPrice) && adPrice < minPrice) || (!isNaN(maxPrice) && adPrice > maxPrice))
+                {
+                    adResults[i].style.display="none";
+                }
+
+                // Filtering by city
+                let adCity = adResults[i].children.city.attributes.value.value;
+                if (city != "" && city != adCity)
+                {
+                    adResults[i].style.display="none";
+                }
+
+                // Filtering by city
+                let adState = adResults[i].children.state.attributes.value.value;
+                if (state != "Choose..." && state != adState)
+                {
+                    adResults[i].style.display="none";
+                }
+                
+                // Searching by keyword
+                var splitWords = keywords.split(',');
+                let adTitle = adResults[i].children.title.attributes.value.value.toLowerCase();
+                let adDesc = adResults[i].children.description.attributes.value.value.toLowerCase();
+                for (let j=0; j<splitWords.length; j++)
+                {
+                    let currWord = splitWords[j].toLowerCase();
+                    let titleFlag = isSubstring(currWord, adTitle);
+                    let descFlag = isSubstring(currWord, adDesc);
+
+                    if (!titleFlag && !descFlag)
+                    {
+                        adResults[i].style.display="none";
+                    }
+                }
+
+                // Filtering by date
+                let adDate = adResults[i].children.date.attributes.value.value;
+                if (date != "" && adDate < date)
+                {
+                    adResults[i].style.display="none";
+                }
+            }
+        } 
+    </script>
+
+    <!--Substring algorithm - converted from Dafny verification-->
+    <script>
+    function isSubstring(token, string)
+    {
+        let i = 0;
+        let r = false;
+        while (i < string.length && r==false)
+        {
+            let m = isPrefix(token, string.substring(i));
+            if (m == true) { r = true; }
+            i+=1;
+        }
+        return r;
+    }
+
+    function isPrefix(token, string)
+    {
+        let r = false;
+        if (token.length == 0) {r = true;}
+        if (string.length < token.length) {r = false;}
+        else { r = (token==string.substring(0, token.length)); }
+        return r;
+    }
+    </script>
+
+    <!--Price checking when bidding, if price is higher than advertised amount-->
+    <script>
+    document.getElementById("priceInput").addEventListener("input", checkPrice);
+
+    function checkPrice() {
+        document.getElementById("priceWarning").innerText = "";
+        let newPrice = parseInt(document.getElementById("priceInput").value);
+        let oldPrice = parseInt(document.getElementById("oPrice").value);
+        if (newPrice > oldPrice)
+        {
+            document.getElementById("priceWarning").innerText = "Price entered is over advertised amount";
+        }
+    }
+    </script>
+</body>
+</html>

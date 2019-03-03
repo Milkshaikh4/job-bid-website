@@ -1,0 +1,240 @@
+html,
+body{
+  margin:0;
+  padding:0;
+  height: 100%;
+}
+
+#cover {
+  height: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+#cover-caption {
+  width: 100%;
+}
+
+#container {
+   min-height:100%;
+   position:relative;
+}
+#header {
+   padding:10px;
+   position: relative;
+}
+#body {
+   padding:10px;
+   padding-bottom:60px;   /* Height of the footer */
+   height: 110vw;
+   display: flex;
+   flex-direction: row;
+}
+#footer {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   height:60px;   /* Height of the footer */
+}
+
+.sidebar
+{
+  background-color: grey;
+  height: 100%;
+  widows: 30%;;
+  display: flex;
+  flex-direction: column;
+}
+
+.choose-bids {
+  position: relative;
+  width: 50%;
+}
+
+.overlay-accepted {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: green;
+  width: 25%;
+  left: 75%;
+  height: 100%;
+}
+
+.overlay-declined {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 25%;
+  left: 75%;
+  background-color: red;
+  height: 100%;
+}
+
+.chosen-text {
+  color: black;
+  background: transparent;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  overflow: hidden;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 100%;
+  right: 0;
+  background-color: #008CBA;
+  overflow: hidden;
+  width: 0;
+  height: 100%;
+  transition: .5s ease;
+}
+
+.content {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.choose-bids:hover .overlay {
+  width: 25%;
+  left: 75%;
+}
+
+.text {
+  color: rgb(248, 249, 250);
+  background: #008CBA;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.results
+{
+  display: flex;
+  width: 70%;
+  margin-left: 20px
+}
+
+.rw 
+{
+  display: flex;
+}
+
+.info
+{
+  border-right: solid 1px #000;
+  padding-right: 5px;
+}
+
+.ad .badge {
+  display: block;
+  position: absolute;
+  top: -12px;
+  right: 3px;
+  line-height: 16px;
+  height: 16px;
+  padding: 0 5px;
+  font-family: Arial, sans-serif;
+  color: rgba(255, 255, 255, 0.993);
+  text-shadow: 0 1px rgba(0, 0, 0, 0.25);
+  border: 1px solid;
+  border-radius: 10px;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.ad .badge {
+  background: #008CBA;
+  border-color: #008CBA;
+  background-image: linear-gradient(to bottom, #acddf6, #008CBA);
+}
+
+.ad a:hover {
+  color: #333;
+  z-index: 2;
+  box-shadow: inset 0 0 0 1px #fafafa, 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+/*GRID CSS*/
+.grid-headline{
+  text-align: center;
+   font-size:2em;
+   font-family: 'Open Sans';
+   margin:2em;
+ }
+ /*RULES FOR THE .grid-header/HEADER TAG*/
+ .grid-header {
+   /*"GRID-AREA" PROPERTY IS A PROPERTY WHO GIVES THE .grid-header A NAME FOR A CERTAIN AREA - WHICH IS DEFINED FURTHER DOWN IN THE CSS WITH GRID-TEMPLATE-AREAS PROPERTY*/
+   grid-area: header;
+      background: red;
+   color: white;
+ }
+ /*RULES FOR THE .grid-nav/NAV TAG*/
+ .grid-nav {
+    /*SAME SCENARIO AS MENTIONED ABOVE*/
+   grid-area: nav;
+   margin-left: 0.5rem;
+      background: green;
+   color: white;
+ }
+ /*RULES FOR THE .grid-main/MAIN TAG*/
+ .grid-main {
+      /*SAME SCENARIO AS MENTIONED ABOVE*/
+   grid-area: content;
+      background: orange;
+   color: white;
+ }
+ 
+ /*RULES FOR THE .grid-aside/ASIDE TAG*/
+ .grid-aside {
+   grid-area: side;
+   margin-right: 0.5rem;
+      background: navy;
+   color: white;
+ }
+ 
+ /*RULES FOR THE .grid-footer/FOOTER TAG*/
+ .grid-footer {
+   grid-area: footer;
+      background: red;
+   color: white;
+ }
+ 
+ /*RULES FOR THE .grid-container/CONTAINER TAG*/
+ .grid-container{
+   /*DEFINES THE GRID ATTRIBUTE TO THE PROPERTY "DISPLAY:"*/
+   display: grid;
+   /*DEFINES THE BEFORE MENTIONED GRID-AREAS ON THE CHILD ELEMENTS WITHIN .grid-container*/
+   grid-template-areas:
+     /*THE HEADER IS SPREAD OUT TO FILL 3/3 OF THE PAGES WIDTH - BASICALLY ITS AN ORDER SYSTEM LIKE THE FLEXBOX PROPERTY "ORDER:"*/
+     "header header header"
+     "nav content side"
+     "footer footer footer";
+ /*DEFINES HOW BIG THE GRID COLUMNS MUST BE - AFFECTS THE NAV AND ASIDE - THE NAV AS THE FIRST ATTRIBUTE/200PX - AND THEN THE FRACTIONAL UNIT WHICH IS PLACEMENT ONCE AGAIN*/
+   grid-template-columns: 200px 1fr 200px;
+   /*SAME SCENARIO JUST WITH THE ROWS - HEADER AND FOOTER VALUES - AND AGAIN SOME "PADDING" WITH THE 1 FRACTIONAL UNIT - WHICH TAKES UP THE AVAILBLE SPACE - IN THIS CASE 1 UNIT OF IT*/
+   grid-template-rows: auto 1fr auto;
+   /*THE GRID GAP BETWEEN ALL OF ITS CHILDREN - FOOTER ETC. - IN HUMAN THE WHITESPACE/PADDING*/
+   grid-gap: 10px;
+   height: 100vh;
+ }
+ 
+ .grid-row {
+   display: grid;
+ }

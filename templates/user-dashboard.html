@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>FiestaPivot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" media="screen" href="static/CSS/userDash.css" />
+
+        <!-- W3 schools modal stylsheet  -->
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="../static/CSS/main.css">
+
+         <!-- Bootstrap CDN and JS  -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </head>
+    <body style="background-color: #eee; height: 100%;">
+        
+        <!--Navbar (Bootstrap taken from https://www.codeply.com/go/qhaBrcWp3v) -->
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+            <a class="navbar-brand abs" href="/">FiestaPivot</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="collapsingNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/search">Search</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                            <a class="nav-link" href="/account">{{name[0]}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/post-ad">
+                            <button type="button" class="btn btn-outline-light">Post an Ad</button>
+                        </a>
+                    </li>
+                    <li style="margin-left: 10px;" class="nav-item">
+                        <a href="/logout">
+                            <button type="button" class="btn btn-outline-light">Sign Out</button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!--Body-->
+    <main role="main" style="height: 100%;">
+        <div class="container" style="padding: 50px;">
+            <h1 class="display-5">Welcome Back {{name[0]}}</h1>
+            <hr class="my-4">
+
+
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="ads-tab" data-toggle="tab" href="#ads" role="tab" aria-controls="home" aria-selected="true">My Ads</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="bids-tab" data-toggle="tab" href="#bids" role="tab" aria-controls="profile" aria-selected="false">My Bids</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="contact" aria-selected="false">My Info</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+
+                <!--ADS TAB-->
+                <div class="tab-pane fade show active" id="ads" role="tabpanel" aria-labelledby="ads-tab">
+                    <div id="active">
+                        {% if ads %}
+                        {% for ad in ads %}
+
+                        
+                        <a onclick="document.getElementById('ad-{{ad[0]}}').style.display='block'" data-toggle="modal" class="list-group-item ad list-group-item-action flex-column align-items-start">
+                            
+                            {% if ad[7] == "COMPLETED - PENDING REVIEW" %}
+                                <span class="badge">Review Ad</span>
+                            {% endif %}
+                            
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ ad[2] }}</h5>
+                                <small>Event date: {{ ad[8] }}</small>
+                            </div>
+                            <p>{{ ad[6] }}</p>
+                            <small class="info">Price: ${{ ad[3] }}</small>
+                            <small class="info">Alcohol provisions: {{ ad[11] }}</small>
+                            <small class="info">Number of people: {{ ad[12] }}</small>
+                            <small class="info">Status: {{ ad[7] }}</small>
+                        </a>
+
+                        
+                        <!--Modals for each bid-->
+                        <!--AD MODALS-->
+                        <div class="w3-modal" id="ad-{{ad[0]}}" tabindex="-1" role="dialog" aria-labelledby="exampleTitle" aria-hidden="true">
+                            <div class="w3-modal-content w3-card-4 w3-animate-zoom" role="document">
+                                <div class="w3-container">
+                                    <div>
+                                        <span onclick="close_ad('ad-{{ad[0]}}')" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>  
+                                    </div>
+                                    <div class="modal-header">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="modal-title">{{ ad[2] }}</h5>
+                                            <small>Event date: {{ ad[8] }}</small>
+                                        </div>
+                                    </div>
+                                    <div id="ad-{{ad[0]}}-modal-body" class="modal-body">
+                                        <p class="mb-1">{{ ad[6] }}</p><p></p>
+                                        <small class="info">Price: ${{ ad[3] }}</small>
+                                        <small class="info">Alcohol provisions: {{ ad[11] }}</small>
+                                        <small class="info">Number of people: {{ ad[12] }}</small>
+                                        <small class="info">Status: {{ ad[7] }}</small>
+                                    </div>
+
+
+                                    {% if ad[7] != "COMPLETED - PENDING REVIEW" %}
+
+                                    {% if bidsOrdered %}
+                                    <!--Put bids for ad in here-->
+                                        {% if bidsOrdered[0][6] == "PENDING" %}
+                                            <b><p>Choose a bid:</p></b> 
+                                        {% endif %}   
+
+                                        {% for bid in bidsOrdered %}
+                                            {% if bid[1] == ad[0] %}
+                                                <div>
+                                                    <a class="choose-bids list-group-item list-group-item-action flex-column align-items-start">
+                                                        <form action="/choose-bid" method="POST">
+                                                            {% if bid[6] == "PENDING" %}
+                                                                <div class="overlay">
+                                                                    <button type="submit" class="text">Choose Bid</button>
+                                                                </div>
+                                                            {% elif bid[6] == "ACCEPTED" %}
+                                                                <div class="overlay-accepted">
+                                                                    <button disabled type="submit" class="chosen-text text-light">Accepted</button>
+                                                                </div>
+                                                            {% elif bid[6] == "DECLINED" %}
+                                                                <div class="overlay-declined">
+                                                                    <button disabled type="submit" class="chosen-text text-light">Declined</button>
+                                                                </div>
+
+                                                            {% endif %}
+
+                                                            <input style="display:none" name="id" value="{{bid[0]}}">
+                                                            <div class="content">
+                                                                <div class="d-flex w-100 justify-content-between">
+                                                                    <h5 class="mb-1" id="name" >Bid for {{ bid[2] }}</h5>
+                                                                </div>
+                                                                <p class="mb-1" id="comment">Message: {{ bid[5] }}</p>
+                                                                <small id="price">Bid amount: ${{ bid[4] }} | </small>
+                                                                <small id="User">Posted by user: {{ bid[3] }}</small>
+                                                            </div>
+                                                        </form>
+                                                    </a>
+
+
+
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                    {% endif %} 
+
+                                    {% else %}
+
+                                    <div class="modal-footer" id="ratingBid">
+                                        <form action="/rateAd" method="POST">
+                                            <h4>We hope that you had a great time hosting your event with FiestaPivot. Please review your experience with this bidder:</h4>
+                                            <p>FiestaScore (Out of 10):</p>
+                                            <input class="form-control" id="ratingAd" name="ratingAd" type="number" placeholder="FiestaPivot score" min="0" max="10" step="1" required>
+                                            <button type="submit">Submit Review</button>
+                                            <input style="display: none" name="adID" type="text" value="{{ad[0]}}">
+                                        </form>
+                                    </div>
+
+                                    {% endif %}
+
+                                    
+                                    <div class="modal-footer">
+                                        {% if ad[7] != "COMPLETED - PENDING REVIEW" %}
+                                            <form action="/delete-ad" method="POST">
+                                                <input style="display: none" name="id" type="text" value="{{ad[0]}}">
+                                                <button type="submit" class="btn btn-secondary w3-hover-red">Delete</button>
+                                            </form>
+                                            <button onclick="edit('ad-{{ad[0]}}', 'ad-{{ad[0]}}-edit-form')" type="button" class="btn btn-primary">Edit</button>
+                                        {% endif %}
+                                    </div>
+                                    
+
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="Modals">
+                            <div id="ad-{{ad[0]}}-edit-form" class="w3-modal">
+                                <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+                                    <div >
+                                        <span onclick="document.getElementById('ad-{{ad[0]}}-edit-form').style.display ='none' " class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>  
+                                    </div>
+
+                                    <section role="main" class="cover-container">
+                                        <div class="container" style="background-color: #eee; padding-bottom: 50px; padding-top: 50px; border-radius: 5px;">
+                                            <h1 class="text-center text-dark">Edit Ad</h1>
+                                            <div class="col-sm-12 offset-sm-3" class="info-form">
+                                                <form action="/edit-ad" method="POST">
+                                                    <input style="display: none" name="adID" value="{{ad[0]}}" required>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-6">
+                                                            <p for="inputPassword4" class="text-dark">Name of event</p>
+                                                            <input type="text" name="title" value="{{ad[2]}}" class="form-control" placeholder="E.g. BBQ with the bois" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-4">
+                                                            <p for="inputCity" class="text-dark">City</p>
+                                                            <input type="text" name="city" value="{{ad[4]}}" class="form-control" placeholder="E.g. Sydney" value="{{city}}" required>
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <p for="inputState" class="text-dark">State</p>
+                                                            <select id="stateSelect" name="state" id="inputState" class="form-control" required>
+                                                                <option selected value="{{ad[5]}}" >{{ad[5]}}</option>
+                                                                <option value="NSW">NSW</option>
+                                                                <option value="QLD">QLD</option>
+                                                                <option value="SA">SA</option>
+                                                                <option value="TAS">TAS</option>
+                                                                <option value="VIC">VIC</option>
+                                                                <option value="WA">WA</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-2">
+                                                            <p for="alcoholSelect" class="text-dark">Alcohol?</p>
+                                                            <select  name="alcohol" id="inputAlcohol" class="form-control" required>
+                                                                <option value="No" {%if ad[11] == "No" %} selected {%endif%}>No</option>
+                                                                <option value="Yes" {%if ad[11] == "Yes" %} selected {%endif%}>Yes</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-6">
+                                                            <p for="inputCity" class="text-dark">Number of People</p>
+                                                            <span class="noPeople">
+                                                                <input name="noPeople" value="{{ad[12]}}" class="form-control" type="number" placeholder="E.g. 30" min="0" max="100000" step="1" required/>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-6">
+                                                            <p for="inputCity" class="text-dark">Price</p>
+                                                            <span class="price">
+                                                                <input name="price" value="{{ad[3]}}" class="form-control" type="number" placeholder="E.g. 150" min="0.00" max="10000.00" required/>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-6">
+                                                            <p for="inputCity" class="text-dark">Description</p>
+                                                            <textarea rows="4" cols="50" name="descr" class="form-control" placeholder="Other specifications such as address, dietary requirements, provided utilities, etc" required>{{ad[6]}}</textarea> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-2">
+                                                            <p for="inputCity" class="text-dark">Date of event</p>
+                                                            <input class="form-control" value="{{ad[8]}}" type="date" name="date" min="now" required>
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <p for="inputState" class="text-dark">Start time of event</p>
+                                                            <input class="form-control" value="{{ad[9]}}" type="time" name="start_time" required>
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <p for="inputState" class="text-dark">End time of event</p>
+                                                            <input class="form-control" value="{{ad[10]}}" type="time" name="end_time" required>
+                                                        </div>
+                                                    </div>
+                                                    <a href="#"><button type="submit" class="btn btn-lg btn-primary">Confirm Changes</button></a>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p>Click on "Post an Ad" tab to create your first ad!</p>
+                        {% endif %}
+
+                    </div>
+                </div>
+                <!--END OF ADS TAB-->
+
+                <!-- BIDS TAB-->
+
+                <div class="tab-pane fade" id="bids" role="tabpanel" aria-labelledby="bids-tab">
+                    
+                    <div id="active">
+                        {% if bids %}
+                        {% for bid in bids %}
+                        <a onclick="document.getElementById('bid-{{bid[0]}}').style.display = 'block' " data-toggle="modal" class="list-group-item list-group-item-action flex-column align-items-start">
+
+                            {% if bid[6] == "COMPLETED - PENDING REVIEW" %}
+                                <span class="badge">Review Ad</span>
+                            {% endif %}
+
+                            <h5 class="mb-1" id="name" class="info">{{ bid[2] }}</h5>
+                            <p class="mb-1" id="comment" class="info">Message: {{ bid[5] }}</p>
+                            <small id="price" class="info">Bid amount: ${{ bid[4] }}</small>
+                            <small id="status" class="info">Original Price: ${{ bid[8] }}</small>
+                            <small id="status" class="info">Status: {{ bid[6] }}</small>
+                            <small id="status" class="info">Date posted: {{ bid[7] }}</small>
+                        </a>
+
+                        <!--Modals for each bid-->
+                        <!--bid MODALS-->
+                        <div class="w3-modal" id="bid-{{bid[0]}}" tabindex="-1" role="dialog" aria-labelledby="exampleTitle" aria-hidden="true">
+                            <div class="w3-modal-content w3-card-4 w3-animate-zoom" role="document">
+                                {% if bid[6] != "COMPLETED - PENDING REVIEW" %}
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">{{ bid[2] }}</h5>
+                                    <span onclick="document.getElementById('bid-{{bid[0]}}').style.display='none' " class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p id="price">Bid amount: ${{ bid[4] }}</p>
+                                    <p class="mb-1" id="comment">Message: {{ bid[5] }}</p><p></p>
+                                    <small id="status">Original Price: ${{ bid[8] }}</small>
+                                    <small id="status">Status: {{ bid[6] }}</small>
+                                </div>
+                                
+
+                                <div class="modal-footer">
+                                    <form action="/delete-bid" method="POST">
+                                        <input style="display: none" name="id" type="text" value="{{bid[0]}}">
+                                        <button type="submit" class="btn btn-secondary w3-hover-red">Delete</button>
+                                    </form>
+                                     <button onclick="edit('bid-{{bid[0]}}', 'bid-{{bid[0]}}-edit-form')" type="button" class="btn btn-primary">Edit</button>
+                                </div>
+
+                                {% else %}
+                                        <span onclick="document.getElementById('bid-{{bid[0]}}').style.display='none' " class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+
+                                <div class="modal-footer" id="ratingBid">
+                                    <div>
+                                        <form action="/rateBid" method="POST">
+                                            <h4>We hope that you had a great time hosting your event with FiestaPivot. Please review your experience with this advertiser:</h4>
+                                            <p>FiestaScore (Out of 10):</p>
+                                            <input class="form-control" id="ratingBid" name="ratingBid" type="number" placeholder="FiestaPivot score" min="0" max="10" step="1" required>
+                                            <button type="submit">Submit Review</button>
+                                            <input style="display: none" name="bidID" type="text" value="{{bid[0]}}">
+                                        </form>
+                                    </div>
+                                </div>
+                                {% endif %}
+                              </div>
+                            </div>
+
+                            <!--Edit Modal for bid-->
+                            <div class="Modals">
+                                <div id="bid-{{bid[0]}}-edit-form" class="w3-modal">
+                                    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+                                        
+                                        <div class="modal-header">
+                                            <span onclick="document.getElementById('bid-{{bid[0]}}-edit-form').style.display='none'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+                                            <h5 class="modal-title">Edit bid for: {{ bid[2] }}</h5>
+                                        </div>
+                                        
+                                        <form action="/edit-bid" method="POST" class="w3-container">
+                                            <div class="w3-container">
+                                                <div class="w3-section">
+                                                    <h5>Original price:</h5>
+                                                    <p>${{ bid[8] }}</p>
+                                                    <h5>Your price:</h5>
+                                                        <input id="priceInput" name="price" value="{{ bid[4] }}" placeholder="Aim to ask for a price equal to or lower than the original">
+                                                    <h5 id="priceWarning" style="color: orange;"></h5>
+                                                    <h5>Additional messages/comments to poster:</h5>
+                                                        <input id="commentInput" name="comment" value="{{ bid[5] }}" placeholder="Notes to poster" required>
+                                                    <input id="ID" name="ID" value="{{ bid[0] }}" type="hidden">
+                                                    <input type="hidden" name="oPrice" value="{{bid[8]}}">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" value="Place Bid" type="button" class="btn btn-primary w3-hover-red">Confirm Changes</button>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% else %}
+                        <p>Click on "Search" to look for events and bid on your first ad!</p>
+                        {% endif %}
+                    </div>
+                    <!--END OF BIDS TAB-->
+
+                <!-- TESTING BUTTON -->    
+
+                <a href="/systemCheck"><button>Testing - System check</button></a>
+                <div>
+                    * This testing button is only for development purposes. This button updates all the status' for ads and bids. If an ad is past its due date 
+                    (ie its the next day in relation to the event, this made more sense to us rather than picking the start_time or the end_time) without being 
+                    bid upon, it will be marked as expired. If an add is bid upon and its past its due date, it will be marked as completed and pending a review 
+                    and mutual rating of each others survices. In conclusion this button allows us to test these features.
+                    During production, this functionality would be automatic everytime a page is loaded to ensure all ads and bids are updated accordingly.
+                </div>
+
+                </div>
+                <!-- MY INFO TAB-->
+                <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
+
+                    <div class="w3-container" id="info">
+                        <p class="lead">My Info</p>
+                        <p>Email: {{info[0]}}</p>
+                        <p>City: {{info[1]}}</p>
+                        <p>State: {{info[2]}}</p>
+                        <p>About me: {{info[3]}}</p>      
+                        <p>Phone number: {{info[4]}}</p>   
+                        <p>Events held: {{info[5]}}</p>
+                        <p>Bids completed: {{info[6]}}</p>   
+                        <p>My FiestaScore: {{info[7]}}</p>   
+
+                        <button onclick="edit('info', 'info-change-password')" type="button" class="btn btn-lg btn-outline-primary" >Change Password</button>
+                        <button onclick="edit('info', 'info-edit-form')" type="button" class="btn btn-lg btn-primary">Edit</button>
+                    </div>
+                </div>
+
+                <div class="Modals">
+                    <div id="info-change-password" class="w3-modal">
+                        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px;">
+
+                            <div >
+                                <span onclick="document.getElementById('info-change-password').style.display ='none';document.getElementById('info').style.display='block'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>  
+                            </div>
+
+                            <section role="main" class="cover-container" id="cover" style="background: url(static/Images/darkDessert.png) center no-repeat;background-size: cover;">
+                                <div id="cover-caption" style="margin-bottom: 80px; padding-top: 50px;">
+                                    <div class="text-center text-light">
+                                        <h3 class="display-4">Change your password</h3>
+                                    </div>
+                                    <div class="col-sm-6 offset-sm-3 info-form">
+                                        <form action="/change-password" onsubmit="return check_password()" method="POST">				
+                                            <div class="form-group">
+                                                <label class="sr-only">Password</label>
+                                                <input type="password" name="change-password1" class="form-control" id="change-password1" placeholder="Password (3-15 characters)" pattern=".{3,15}" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only">Confirm Password</label>
+                                                <input type="password" name="passwordConfirm" class="form-control" id="change-password2" placeholder="Confirm password" pattern=".{3,15}" required>
+                                            </div>						
+                                            <input name="userID" type="hidden" value="{{info[0]}}" required>
+                                            <button type="submit" class="btn btn-primary">Change Password</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="Modals">
+                    <div id="info-edit-form" class="w3-modal">
+                        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px;">
+                            <div >
+                                <span onclick="document.getElementById('info-edit-form').style.display ='none';document.getElementById('info').style.display='block'" class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>  
+                            </div>
+
+                            <section role="main" class="cover-container" id="info-edit-form" style="background: url(static/Images/darkDessert.png) center;background-size: cover;">
+                                <div id="cover-caption">
+                                    <div class="text-center text-light">
+                                        <h3 class="display-4">Edit your details</h3>
+                                    </div>
+                                    <div class="col-sm-6 offset-sm-3 info-form">
+                                        <form action="edit-info" method="POST">						
+                                            <div class="form-group">
+                                                <label class="sr-only">Name</label>
+                                                <input type="text" name="username" class="form-control" value="{{name[0]}}" placeholder="John Smith" required>
+                                            </div>										
+                                            <div class="form-group" >
+                                                <label class="sr-only">Email</label>
+                                                <input type="email" name="email" class="form-control" value="{{info[0]}}" placeholder="Email" required>
+                                            </div>										
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-7">
+                                                    <label class="sr-only">City</label>
+                                                    <input type="text" name="city" class="form-control" value="{{info[1]}}" placeholder="State: (eg. Sydney)" required>
+                                                </div>
+                                                <div class="form-group col-md-5">
+                                                    <label class="sr-only">State</label
+                                                        >
+                                                    <select name="state" id="inputState" class="form-control">
+                                                        <option selected>{{info[2]}}</option>
+                                                        <option>NSW</option>
+                                                        <option>QLD</option>
+                                                        <option>SA</option>
+                                                        <option>TAS</option>
+                                                        <option>VIC</option>
+                                                        <option>WA</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label class="sr-only">About me</label>
+                                                    <input type="text" name="about" class="form-control" value="{{info[3]}}" placeholder="About me: (eg. Specialising in baking, tarts..)">
+                                                </div>
+                                            </div>
+                        
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    <label class="sr-only">Phone number</label>
+                                                    <input type="text" name="phoneNo" class="form-control" value="{{info[4]}}" placeholder="Phone number: (eg. 0412 345 678)"required>
+                                                </div>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary">Confirm Changes</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                <!--END OF INFO TAB-->
+            </div>
+        </div>
+
+       
+    </main>
+    <script>
+        function show_modal(id) {
+            document.getElementById(id).style.display='block'
+        }
+
+        function edit(id1, id2) {
+            document.getElementById(id1).style.display="none";
+
+            var form = document.getElementById(id2);
+            form.style.display='block';
+        }
+
+        function close_ad(adID) {
+            document.getElementById(adID).style.display='none';
+
+            var body = document.getElementById(adID + "-modal-body");
+            body.style.display = "block";
+
+            var form = document.getElementById(adID + "-modal-body-edit-form");
+            form.style.display='none';
+        }
+
+        function check_password() {
+            let password = document.getElementById("change-password1").value;
+            let confirm = document.getElementById("change-password2").value;
+
+            if (parseInt(password) != parseInt(confirm) ) {
+                alert("Passwords do not match, please try again \n" + password + " != " + confirm);
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+
+    <!-- Footer -->
+        <footer class="footer font-small navbar-dark bg-dark pt-4">
+            <div class="container text-center">
+                <span class="text-light">
+                FiestaPivot is an innovative new take on the outsourcing business model - bringing all its benefits to the realm of food preparation. Find people to cater for your party, black tie function, or picnic, or offer your services to help new clients, and become the most in-demand business in town.
+                </span>
+            </div>
+            <div class="text-center py-3"><p class="text-light">© 2018 Copyright Team Artemis</div>
+        </footer>
+    </body>
+
+</html> 
